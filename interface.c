@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "variaveisGlobais.h"
-
 #ifdef _WIN32
     #include <conio.h> // Biblioteca para a interface funcionar no windows
     #define CLEAR_SCREEN() system("cls")
@@ -14,7 +12,6 @@
 
 #include "interface.h"
 
-#include "matrizesGlobais.h"
 #include "variaveisGlobais.h"
 
 int NUM_VAZIOS = 20;

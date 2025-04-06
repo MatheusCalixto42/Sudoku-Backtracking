@@ -4,7 +4,6 @@
 #include "interface.h"
 #include "gerarSudoku.h"
 #include "matrizesGlobais.h"
-#include "variaveisGlobais.h"
 
 
 int main() {
