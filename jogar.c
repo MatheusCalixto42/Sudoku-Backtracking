@@ -54,6 +54,8 @@ void jogar() {
         }
     }
 
+    desenhaTabuleiro(sudokuCompleto, x, y, cont);   // Mostra o tabuleiro completo (sudokuCompleto)
+
     if(c == 'q' || c == 'Q')
         printf("\n\nDesistiu...\n\n");
     else if(!cont)

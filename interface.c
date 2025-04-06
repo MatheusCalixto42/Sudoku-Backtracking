@@ -68,7 +68,7 @@ void desenhaTabuleiro(int** tab, int sel_x, int sel_y, int tent) {
     }
     printf("└───────┴───────┴───────┘\n\n");
 
-    printf("Quantidade de tentativas restantes: %d", tent - 1);
+    printf("Quantidade de tentativas restantes: %d", tent);
 }
 
 void escolherDificuldade() {
