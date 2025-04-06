@@ -19,7 +19,7 @@
 
 int NUM_VAZIOS = 20;
 
-char getch() {
+char getChar() {
     #ifdef _WIN32   // Se o sistema operacional for windows
         return _getch(); // Função nativa no Windows
     #else

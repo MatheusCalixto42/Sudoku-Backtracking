@@ -14,7 +14,7 @@ void jogar() {
     while (cont && !ganhouJogo()) {
 
         desenhaTabuleiro(x, y, cont);
-        c = getch();
+        c = getChar();
 
         if (c == '\033') { // tecla especial (ESC)
             getch(); // [
