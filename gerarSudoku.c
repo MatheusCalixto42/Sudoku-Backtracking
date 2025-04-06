@@ -61,7 +61,7 @@ void gerarCandidatos(int* c, int linha, int coluna, int* numCandidatos) {
 
 void sudokuBT(int linha, int coluna) {
     
-    if(linha == N)   // Completou toda matriz. Ex.: 9x9 -> sudokuCompleto[8][9]
+    if(linha == N)   // Completou toda matriz.
         return;
     
     if(coluna == N) {   // Ir para a proxima linha quando chegar passar da ultima coluna
