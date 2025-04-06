@@ -54,7 +54,9 @@ void jogar() {
         }
     }
 
-    if(!cont)
+    if(c == 'q' || c == 'Q')
+        printf("\n\nDesistiu...\n\n");
+    else if(!cont)
         printf("\n\nPerdeu o jogo...\n\n");
     else
         printf("\n\nGANHOU!!!!\n\n");
