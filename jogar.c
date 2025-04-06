@@ -61,6 +61,7 @@ void jogar() {
 
     printf("\n\nEncerrado\n\n");
 
+    c = getChar();  // "Pausa" o fim do programa
 }
 
 int ganhouJogo() {
