@@ -1,3 +1,35 @@
+# Diretórios de build
+bin/
+obj/
+build/
+Debug/
+Release/
+
+# Arquivos gerados pelo Code::Blocks
+*.depend
+*.layout
+*.layout.save
+*.cbp
+*.o
+*.exe
+*.dll
+*.so
+*.a
+
+# Arquivos temporários
+*.autosave
+*.user
+*.bak
+*~
+*.swp
+
+# Arquivos do sistema (caso esteja usando Windows)
+Thumbs.db
+Desktop.ini
+
+# Arquivos do macOS
+.DS_Store
+
 # VsCode
 .vscode/*
 !.vscode/settings.json
