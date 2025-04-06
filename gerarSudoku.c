@@ -4,17 +4,18 @@
 
 #include "gerarSudoku.h"
 
-void primeiraLinha(int** tab) {
+#include "matrizesGlobais.h"
+#include "variaveisGlobais.h"
+
+void primeiraLinha() {
 
     int numeros[N];
 
-    for(int i = 0; i < N; i++) {   // Preenche o vetor numeros[]
+    for(int i = 0; i < N; i++) {   // Preenche o vetor numeros
         numeros[i] = i + 1;
     }
 
-    srand(time(NULL));
-
-    for(int i = N - 1; i > 0; i--) { // Embaralha o vetor numeros[]
+    for(int i = N - 1; i > 0; i--) { // Embaralha o vetor numeros
         int j = rand() % (i + 1);
         int temp = numeros[i];
         numeros[i] = numeros[j];
@@ -22,14 +23,14 @@ void primeiraLinha(int** tab) {
     }
 
     for(int i = 0; i < N; i++) {    // Preenche a diagonal da matriz com os valores "aleatorios"
-        tab[0][i] = numeros[i];
+        sudokuCompleto[0][i] = numeros[i];
     }
 
 }
 
-int verificarEscolha(int** tab, int num, int linha, int coluna) {
+int verificarEscolha(int num, int linha, int coluna) {
     for (int i = 0; i < N; i++) {
-        if (tab[linha][i] == num || tab[i][coluna] == num)
+        if (sudokuCompleto[linha][i] == num || sudokuCompleto[i][coluna] == num)
             return 0;
     }
 
@@ -38,18 +39,18 @@ int verificarEscolha(int** tab, int num, int linha, int coluna) {
 
     for (int i = 0; i < 3; i++)
         for (int j = 0; j < 3; j++)
-            if (tab[blocoLinha + i][blocoColuna + j] == num)
+            if (sudokuCompleto[blocoLinha + i][blocoColuna + j] == num)
                 return 0;
 
     return 1;
 }
 
-void gerarCandidatos(int** tab, int* c, int linha, int coluna, int* numCandidatos) {
+void gerarCandidatos(int* c, int linha, int coluna, int* numCandidatos) {
 
     int cont = 0;
 
     for(int num = 1; num <= N; num++) {
-        if(verificarEscolha(tab, num, linha, coluna)) {
+        if(verificarEscolha(num, linha, coluna)) {
             c[cont] = num;
             cont++;
         }
@@ -58,65 +59,68 @@ void gerarCandidatos(int** tab, int* c, int linha, int coluna, int* numCandidato
     *numCandidatos = cont;
 }
 
-void sudokuBT(int** tab, int linha, int coluna) {
+void sudokuBT(int linha, int coluna) {
     
-    if((linha == N - 1) && (coluna == N))   // Completou toda matriz. Ex.: 9x9 -> tab[8][9]
+    if(linha == N)   // Completou toda matriz. Ex.: 9x9 -> sudokuCompleto[8][9]
         return;
     
-    if(coluna == N) {   // Ir para a proxima linha
-        linha++;
-        coluna = 0;
+    if(coluna == N) {   // Ir para a proxima linha quando chegar passar da ultima coluna
+        sudokuBT(linha + 1, 0);
+        return;
     }
 
-    if (tab[linha][coluna] != 0)    // Essa condicional serve para que o backtracking analise todas os espacos da matriz, independente da quantidade de candidatos para cada vaga
-        sudokuBT(tab, linha, coluna + 1);
-        
+    if (sudokuCompleto[linha][coluna] != 0) {   // Essa condicional serve para ignorar os espacos ja preenchidos
+        sudokuBT(linha, coluna + 1);
+        return;
+    }
+
     int c[N];   // Vetor de candidatos
     memset(c, 0, sizeof(c));
     int numCandidatos = 0;  // Quantidade de candidatos
 
-    gerarCandidatos(tab, c, linha, coluna, &numCandidatos);
+    gerarCandidatos(c, linha, coluna, &numCandidatos); // Procura os numeros possiveis na posicao atual
 
-    for(int i = 0; i < numCandidatos; i++) {
-        if(verificarEscolha(tab, c[i], linha, coluna)) {
-            tab[linha][coluna] = c[i];
-            sudokuBT(tab, linha, coluna + 1);
-        }  
+    for(int i = 0; i < numCandidatos; i++) {    // Intera recursivamente sobre todos os candidatos validos
+        sudokuCompleto[linha][coluna] = c[i];
+        sudokuBT(linha, coluna + 1);
+
+        if(sudokuCompleto[N - 1][N - 1] != 0)   // Verifica se a ultima casa (tab[8][8]) já foi preenchida
+            return;
     }
 
+    sudokuCompleto[linha][coluna] = 0; // Serve para "desfazer" a escolha caso nao seja a correta
+
 }
 
-void gerarSudoku(int** tabCompleto, int** tabIncompleto) {
-    primeiraLinha(tabCompleto);
-    sudokuBT(tabCompleto, 1, 0);
+void gerarSudoku() {
+    primeiraLinha();
 
-    gerarEspacosVazios(tabCompleto, tabIncompleto, NUM_VAZIOS);
+    sudokuBT(1, 0); // Como a primeira linha já foi preenchida aleatoriamente, o backtracking comeca a partir da segunda linha
+
+    gerarEspacosVazios();   // Adiciona os espacos vazios na matriz sudokuIncompleta, que sera usada no jogo para ser completada
 }
 
-
-void gerarEspacosVazios(int** tabCompleto, int** tabIncompleto, int dificuldade) {
+void gerarEspacosVazios() {
     
-    copiarValoresMatriz(tabCompleto, tabIncompleto);
+    copiarValoresMatriz();  // Copiar os dados da matriz completa para a incompleta
 
-    srand(time(NULL));
+    int linha = 0, coluna = 0;
 
-    int linha, coluna;
-
-    for (int i = 0; i < NUM_VAZIOS; ) {
+    for (int i = 0; i < NUM_VAZIOS; ) { // Algoritmo para escolher aleatoriamente NUM_VAZIOS espacos para zerar da matriz sudokuIncompleta
         linha = rand() % N;
         coluna = rand() % N;
 
-        if (tabIncompleto[linha][coluna] != 0) {  // Evita repetir a mesma posição
-            tabIncompleto[linha][coluna] = 0;     // Marca a posição como escolhida
+        if (sudokuIncompleto[linha][coluna] != 0) {
+            sudokuIncompleto[linha][coluna] = 0;
             i++;
         }
     }
 }
 
-void copiarValoresMatriz(int** tabCompleto, int** tabIncompleto) {
+void copiarValoresMatriz() {
     for(int i = 0; i < N; i++) {
         for(int j = 0; j < N; j++) {
-            tabIncompleto[i][j] = tabCompleto[i][j];
+            sudokuIncompleto[i][j] = sudokuCompleto[i][j];
         }
     }
 }

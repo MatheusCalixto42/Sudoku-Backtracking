@@ -1,6 +1,10 @@
 #ifndef JOGAR_H
 #define JOGAR_H
 
-void jogar(int** tabCompleto, int** tabIncompleto);
+// Inicializa o jogo com as duas matrizes preenchida (sudokuCompleto e sudokuIncompleto)
+void jogar();
+
+// Testa para saber se o jogador ganhou o jogo
+int ganhouJogo();
 
 #endif

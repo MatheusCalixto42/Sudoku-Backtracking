@@ -1,32 +1,24 @@
 #include <stdlib.h>
-#include <string.h>
 
-#include "gerarSudoku.h"
 #include "jogar.h"
+#include "interface.h"
+#include "gerarSudoku.h"
+#include "matrizesGlobais.h"
+#include "variaveisGlobais.h"
+
 
 int main() {
+    srand(time(NULL));  // semente usada para calcular os numeros "aleatorios"
      
-    int** sudokuCompleto = (int**)malloc(N*sizeof(int *));  // Matriz alocada dinamicamente
-    int** sudokuIncompleto = (int**)malloc(N*sizeof(int *));
+    inicializarMatrizes();
 
-    for(int i = 0; i < N; i++) {
-        sudokuCompleto[i] = (int *)malloc(N*sizeof(int));
-        sudokuIncompleto[i] = (int *)malloc(N*sizeof(int));
+    escolherDificuldade();
 
-        memset(sudokuCompleto[i], 0, sizeof(sudokuCompleto));
-    }
+    gerarSudoku();
 
-    gerarSudoku(sudokuCompleto, sudokuIncompleto);
+    jogar();
 
-    jogar(sudokuCompleto, sudokuIncompleto);
-
-    for(int i = 0; i < N; i++) {
-        free(sudokuCompleto[i]);
-        free(sudokuIncompleto[i]);
-    }
-
-    free(sudokuCompleto);
-    free(sudokuIncompleto);
-
+    finalizarMatrizes();
+    
     return 0;
 }

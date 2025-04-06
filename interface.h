@@ -1,13 +1,16 @@
 #ifndef INTERFACE_H
 #define INTERFACE_H
 
-#define tentativas 5
-#define TAM 9
-
+// Tanto no Linux/MACOS quanto no Windows serve para captar o caracter do teclado para ser usado na interface do jogo
 char getch();
 
+// Serve para "atualizar" o prompt, dando a ilusao de movimento
 void limparTela();
 
-void desenhaTabuleiro(int** sudoku, int sel_x, int sel_y);
+// Desenha o menu de escolha de dificuldade
+void escolherDificuldade();
+
+// Desenha a matriz sudokuIncompleta para ser usada no jogo
+void desenhaTabuleiro(int sel_x, int sel_y, int tent);
 
 #endif

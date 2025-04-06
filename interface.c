@@ -1,48 +1,65 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
-#include <termios.h>
+
+#include "variaveisGlobais.h"
+
+#ifdef _WIN32
+    #include <conio.h> // Biblioteca para a interface funcionar no windows
+    #define CLEAR_SCREEN() system("cls")
+#else
+    #include <unistd.h>
+    #include <termios.h>
+    #define CLEAR_SCREEN() printf("\033[2J\033[H")
+#endif
 
 #include "interface.h"
 
+#include "matrizesGlobais.h"
+#include "variaveisGlobais.h"
+
+int NUM_VAZIOS = 20;
+
 char getch() {
-    struct termios oldt, newt;
-    char c;
-    
-    tcgetattr(STDIN_FILENO, &oldt); // salva estado atual
-    newt = oldt;
-    newt.c_lflag &= ~(ICANON | ECHO); // modo raw
-    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
-    
-    c = getchar();
-    
-    tcsetattr(STDIN_FILENO, TCSANOW, &oldt); // restaura modo
-    return c;
+    #ifdef _WIN32   // Se o sistema operacional for windows
+        return _getch(); // Função nativa no Windows
+    #else
+        struct termios oldt, newt;
+        char c;
+
+        tcgetattr(STDIN_FILENO, &oldt); 
+        newt = oldt;
+        newt.c_lflag &= ~(ICANON | ECHO); 
+        tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+
+        c = getchar(); // Lê um caractere
+
+        tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+        return c;
+    #endif
 }
 
-// Limpa a tela
 void limparTela() {
-    printf("\033[2J\033[H");
+    CLEAR_SCREEN(); // Macro definido pra limpar a tela de acordo com o sistema operacional
 }
 
-void desenhaTabuleiro(int** sudoku, int sel_x, int sel_y) {
+void desenhaTabuleiro(int sel_x, int sel_y, int tent) {
     limparTela();
     printf("\nUse as setas para mover. Digite 1-9 para inserir. Q para sair.\n\n");
     
     printf("┌───────┬───────┬───────┐\n");
-    for (int i = 0; i < TAM; i++) {
+    for (int i = 0; i < N; i++) {
         printf("│");
-        for (int j = 0; j < TAM; j++) {
+        for (int j = 0; j < N; j++) {
             if (i == sel_y && j == sel_x) {
-                if (sudoku[i][j] == 0)
+                if (sudokuIncompleto[i][j] == 0)
                     printf("[]");
                 else
-                    printf("[%d]", sudoku[i][j]);
+                    printf("[%d]", sudokuIncompleto[i][j]);
             } else {
-                if (sudoku[i][j] == 0)
+                if (sudokuIncompleto[i][j] == 0)
                     printf(" .");
                 else
-                    printf(" %d", sudoku[i][j]);
+                    printf(" %d", sudokuIncompleto[i][j]);
             }
 
             if ((j + 1) % 3 == 0)
@@ -54,5 +71,25 @@ void desenhaTabuleiro(int** sudoku, int sel_x, int sel_y) {
     }
     printf("└───────┴───────┴───────┘\n\n");
 
-    printf("Quantidade de tentativas restantes: %d", tentativas);
+    printf("Quantidade de tentativas restantes: %d", tent - 1);
+}
+
+void escolherDificuldade() {
+    int escolha;
+
+    limparTela();
+
+    printf("########## SUDOKU - BACKTRACKING ##########\n\n\n");
+    printf("1 - Facil\n2 - Medio\n3 - Dificil\n\n");
+    printf("Escolha uma dificuldade: ");
+    scanf("%d", &escolha);
+
+    switch (escolha) {
+        case 1: NUM_VAZIOS = 25; break;
+        case 2: NUM_VAZIOS = 40; break;
+        case 3: NUM_VAZIOS = 50; break;
+    }
+
+    limparTela();
+
 }
