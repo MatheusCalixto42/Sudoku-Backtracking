@@ -2,8 +2,16 @@
 #include <stdlib.h>
 
 #ifdef _WIN32
+    #include <windows.h>
     #include <conio.h> // Biblioteca para a interface funcionar no windows
     #define CLEAR_SCREEN() system("cls")
+
+    void habilitarANSI() {
+        HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+        DWORD modoOriginal;
+        GetConsoleMode(hOut, &modoOriginal);
+        SetConsoleMode(hOut, modoOriginal | ENABLE_VIRTUAL_TERMINAL_PROCESSING);
+    }
 #else
     #include <unistd.h>
     #include <termios.h>

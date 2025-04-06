@@ -7,6 +7,11 @@
 
 
 int main() {
+
+    #ifdef _WIN32
+        habilitarANSI();
+    #endif
+
     srand(time(NULL));  // semente usada para calcular os numeros "aleatorios"
      
     inicializarMatrizes();
