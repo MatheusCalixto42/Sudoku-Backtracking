@@ -42,7 +42,7 @@ void limparTela() {
     CLEAR_SCREEN(); // Macro definido pra limpar a tela de acordo com o sistema operacional
 }
 
-void desenhaTabuleiro(int sel_x, int sel_y, int tent) {
+void desenhaTabuleiro(int** tab, int sel_x, int sel_y, int tent) {
     limparTela();
     printf("\nUse as setas para mover. Digite 1-9 para inserir. Q para sair.\n\n");
     
@@ -51,15 +51,15 @@ void desenhaTabuleiro(int sel_x, int sel_y, int tent) {
         printf("│");
         for (int j = 0; j < N; j++) {
             if (i == sel_y && j == sel_x) {
-                if (sudokuIncompleto[i][j] == 0)
+                if (tab[i][j] == 0)
                     printf("[]");
                 else
-                    printf("[%d]", sudokuIncompleto[i][j]);
+                    printf("[%d]", tab[i][j]);
             } else {
-                if (sudokuIncompleto[i][j] == 0)
+                if (tab[i][j] == 0)
                     printf(" .");
                 else
-                    printf(" %d", sudokuIncompleto[i][j]);
+                    printf(" %d", tab[i][j]);
             }
 
             if ((j + 1) % 3 == 0)

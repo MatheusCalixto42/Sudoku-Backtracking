@@ -11,6 +11,6 @@ void limparTela();
 void escolherDificuldade();
 
 // Desenha a matriz sudokuIncompleta para ser usada no jogo
-void desenhaTabuleiro(int sel_x, int sel_y, int tent);
+void desenhaTabuleiro(int** tab, int sel_x, int sel_y, int tent);
 
 #endif

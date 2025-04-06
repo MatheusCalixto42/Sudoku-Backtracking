@@ -13,18 +13,37 @@ void jogar() {
 
     while (cont && !ganhouJogo()) {
 
-        desenhaTabuleiro(x, y, cont);
-        c = getChar();
+        desenhaTabuleiro(sudokuIncompleto, x, y, cont);
+        
+        #ifdef _WIN32
+            c = getChar();
 
-        if (c == '\033') { // tecla especial (ESC)
-            getch(); // [
-            switch(getch()) {
-                case 'A': if (y > 0) y--; break; // seta cima
-                case 'B': if (y < N-1) y++; break; // seta baixo
-                case 'C': if (x < N-1) x++; break; // seta direita
-                case 'D': if (x > 0) x--; break; // seta esquerda
+            if(c == 0 || c == -32) {    // Tecla especial (setas)
+                c = getChar();
+                switch (c) {
+                    case 72: if (y > 0) y--; break; // seta pra cima
+                    case 80: if (y < N - 1) y++; break; // Seta paa baixo
+                    case 77: if (x < N - 1) x++; break; // Seta para direita
+                    case 75: if (x > 0) x--; break; // Seta para esquerda
+                }
             }
-        } else if (c >= '1' && c <= '9') {
+
+        #else
+            c = getChar();
+
+            if (c == '\033') { // tecla especial (ESC)
+                getChar(); // [
+                switch(getChar()) {
+                    case 'A': if (y > 0) y--; break; // seta cima
+                    case 'B': if (y < N-1) y++; break; // seta baixo
+                    case 'C': if (x < N-1) x++; break; // seta direita
+                    case 'D': if (x > 0) x--; break; // seta esquerda
+                }
+            } 
+        
+        #endif
+        
+        if (c >= '1' && c <= '9') {
             if ((c - '0') == sudokuCompleto[y][x]) {    // Caso tenha acertado o numero da casa vazia, coloca ele na matriz sudokuIncompleta
                 sudokuIncompleto[y][x] = c - '0';
             } else {

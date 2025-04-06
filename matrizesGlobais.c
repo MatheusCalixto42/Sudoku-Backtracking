@@ -12,10 +12,8 @@ void inicializarMatrizes() {
     sudokuIncompleto = (int**)malloc(N*sizeof(int *));
 
     for(int i = 0; i < N; i++) {
-        sudokuCompleto[i] = (int *)malloc(N*sizeof(int));
-        sudokuIncompleto[i] = (int *)malloc(N*sizeof(int));
-
-        memset(sudokuCompleto[i], 0, sizeof(sudokuCompleto));
+        sudokuCompleto[i] = (int *)calloc(N, sizeof(int));
+        sudokuIncompleto[i] = (int *)calloc(N, sizeof(int));
     }
 }
 
