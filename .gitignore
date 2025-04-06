@@ -10,11 +10,6 @@ Release/
 *.layout
 *.layout.save
 *.cbp
-*.o
-*.exe
-*.dll
-*.so
-*.a
 
 # Arquivos temporários
 *.autosave
