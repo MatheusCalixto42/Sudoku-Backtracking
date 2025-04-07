@@ -5,13 +5,6 @@
     #include <windows.h>
     #include <conio.h> // Biblioteca para a interface funcionar no windows
     #define CLEAR_SCREEN() system("cls")
-
-    void habilitarANSI() {
-        HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
-        DWORD modoOriginal;
-        GetConsoleMode(hOut, &modoOriginal);
-        SetConsoleMode(hOut, modoOriginal | ENABLE_VIRTUAL_TERMINAL_PROCESSING);
-    }
 #else
     #include <unistd.h>
     #include <termios.h>
@@ -51,30 +44,57 @@ void desenhaTabuleiro(int** tab, int sel_x, int sel_y, int tent) {
     limparTela();
     printf("\nUse as setas para mover. Digite 1-9 para inserir. Q para sair.\n\n");
     
-    printf("┌───────┬───────┬───────┐\n");
-    for (int i = 0; i < N; i++) {
-        printf("│");
-        for (int j = 0; j < N; j++) {
-            if (i == sel_y && j == sel_x) {
-                if (tab[i][j] == 0)
-                    printf("[]");
-                else
-                    printf("[%d]", tab[i][j]);
-            } else {
-                if (tab[i][j] == 0)
-                    printf(" .");
-                else
-                    printf(" %d", tab[i][j]);
-            }
+    #ifdef _WIN32
+        printf("+---------+---------+---------+\n");
+        for (int i = 0; i < N; i++) {
+            printf("|");
+            for (int j = 0; j < N; j++) {
+                if (i == sel_y && j == sel_x) {
+                    if (tab[i][j] == 0)
+                        printf("[]");
+                    else
+                        printf("[%d]", tab[i][j]);
+                } else {
+                    if (tab[i][j] == 0)
+                        printf(" . ");
+                    else
+                        printf(" %d ", tab[i][j]);
+                }
 
-            if ((j + 1) % 3 == 0)
-                printf(" │");
+                if ((j + 1) % 3 == 0)
+                    printf("|");
+            }
+            printf("\n");
+            if ((i + 1) % 3 == 0 && i != 8)
+                printf("+---------+---------+---------+\n");
         }
-        printf("\n");
-        if ((i + 1) % 3 == 0 && i != 8)
-            printf("├───────┼───────┼───────┤\n");
-    }
-    printf("└───────┴───────┴───────┘\n\n");
+        printf("+---------+---------+---------+\n\n");
+    #else
+        printf("┌───────┬───────┬───────┐\n");
+        for (int i = 0; i < N; i++) {
+            printf("│");
+            for (int j = 0; j < N; j++) {
+                if (i == sel_y && j == sel_x) {
+                    if (tab[i][j] == 0)
+                        printf("[]");
+                    else
+                        printf("[%d]", tab[i][j]);
+                } else {
+                    if (tab[i][j] == 0)
+                        printf(" .");
+                    else
+                        printf(" %d", tab[i][j]);
+                }
+
+                if ((j + 1) % 3 == 0)
+                    printf(" │");
+            }
+            printf("\n");
+            if ((i + 1) % 3 == 0 && i != 8)
+                printf("├───────┼───────┼───────┤\n");
+        }
+        printf("└───────┴───────┴───────┘\n\n");
+    #endif
 
     printf("Quantidade de tentativas restantes: %d", tent);
 }

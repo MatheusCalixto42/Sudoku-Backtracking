@@ -22,7 +22,7 @@ void primeiraLinha() {
         numeros[j] = temp;
     }
 
-    for(int i = 0; i < N; i++) {    // Preenche a diagonal da matriz com os valores "aleatorios"
+    for(int i = 0; i < N; i++) {    // Preenche a linha da matriz com os valores "aleatorios"
         sudokuCompleto[0][i] = numeros[i];
     }
 
@@ -66,11 +66,6 @@ void sudokuBT(int linha, int coluna) {
     
     if(coluna == N) {   // Ir para a proxima linha quando chegar passar da ultima coluna
         sudokuBT(linha + 1, 0);
-        return;
-    }
-
-    if (sudokuCompleto[linha][coluna] != 0) {   // Essa condicional serve para ignorar os espacos ja preenchidos
-        sudokuBT(linha, coluna + 1);
         return;
     }
 
