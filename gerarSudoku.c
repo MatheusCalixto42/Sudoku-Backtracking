@@ -75,7 +75,7 @@ void sudokuBT(int linha, int coluna) {
 
     gerarCandidatos(c, linha, coluna, &numCandidatos); // Procura os numeros possiveis na posicao atual
 
-    for(int i = 0; i < numCandidatos; i++) {    // Intera recursivamente sobre todos os candidatos validos
+    for(int i = 0; i < numCandidatos; i++) {    // Itera recursivamente sobre todos os candidatos validos
         sudokuCompleto[linha][coluna] = c[i];
         sudokuBT(linha, coluna + 1);
 
