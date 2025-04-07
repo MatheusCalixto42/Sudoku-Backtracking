@@ -1,11 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "variaveisGlobais.h"
-
 #ifdef _WIN32
+    #include <windows.h>
     #include <conio.h> // Biblioteca para a interface funcionar no windows
     #define CLEAR_SCREEN() system("cls")
+
+    void habilitarANSI() {
+        HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+        DWORD modoOriginal;
+        GetConsoleMode(hOut, &modoOriginal);
+        SetConsoleMode(hOut, modoOriginal | ENABLE_VIRTUAL_TERMINAL_PROCESSING);
+    }
 #else
     #include <unistd.h>
     #include <termios.h>
@@ -14,12 +20,11 @@
 
 #include "interface.h"
 
-#include "matrizesGlobais.h"
 #include "variaveisGlobais.h"
 
 int NUM_VAZIOS = 20;
 
-char getch() {
+char getChar() {
     #ifdef _WIN32   // Se o sistema operacional for windows
         return _getch(); // Função nativa no Windows
     #else
@@ -42,7 +47,7 @@ void limparTela() {
     CLEAR_SCREEN(); // Macro definido pra limpar a tela de acordo com o sistema operacional
 }
 
-void desenhaTabuleiro(int sel_x, int sel_y, int tent) {
+void desenhaTabuleiro(int** tab, int sel_x, int sel_y, int tent) {
     limparTela();
     printf("\nUse as setas para mover. Digite 1-9 para inserir. Q para sair.\n\n");
     
@@ -51,15 +56,15 @@ void desenhaTabuleiro(int sel_x, int sel_y, int tent) {
         printf("│");
         for (int j = 0; j < N; j++) {
             if (i == sel_y && j == sel_x) {
-                if (sudokuIncompleto[i][j] == 0)
+                if (tab[i][j] == 0)
                     printf("[]");
                 else
-                    printf("[%d]", sudokuIncompleto[i][j]);
+                    printf("[%d]", tab[i][j]);
             } else {
-                if (sudokuIncompleto[i][j] == 0)
+                if (tab[i][j] == 0)
                     printf(" .");
                 else
-                    printf(" %d", sudokuIncompleto[i][j]);
+                    printf(" %d", tab[i][j]);
             }
 
             if ((j + 1) % 3 == 0)
@@ -71,7 +76,7 @@ void desenhaTabuleiro(int sel_x, int sel_y, int tent) {
     }
     printf("└───────┴───────┴───────┘\n\n");
 
-    printf("Quantidade de tentativas restantes: %d", tent - 1);
+    printf("Quantidade de tentativas restantes: %d", tent);
 }
 
 void escolherDificuldade() {

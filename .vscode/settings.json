@@ -1,9 +1,0 @@
-{
-    "files.associations": {
-        "*.pl": "prolog",
-        "interface.h": "c",
-        "time.h": "c",
-        "gerarsudoku.h": "c",
-        "variaveisglobais.h": "c"
-    }
-}
